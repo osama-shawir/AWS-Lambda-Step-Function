@@ -24,10 +24,7 @@ And here is the final output of the state machine:
 
 For a more detailed walkthrough of the state machine and its execution, watch this demo video:
 
-[![Demo Video](https://img.youtube.com/vi/DfJelpsGil4/0.jpg)](https://youtu.be/DfJelpsGil4)
-
-https://youtu.be/DfJelpsGil4
-
+[![Demo Video](https://img.youtube.com/vi/DfJelpsGil4/0.jpg)](https://www.youtube.com/watch?v=DfJelpsGil4)
 
 ## Setup
 
