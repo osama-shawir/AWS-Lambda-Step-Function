@@ -1,85 +1,42 @@
-# Rust Lambda Function for Summary Statistics
+# AWS Step Functions State Machine with Lambda Functions
 
-This project is a Rust-based AWS Lambda function that calculates summary statistics from a JSON input file and writes the results to an output text file.
+This project demonstrates the use of AWS Step Functions to orchestrate AWS Lambda functions. The state machine is designed to execute a Lambda function, make a decision based on the output, and then execute another Lambda function based on that decision.
 
-## Getting Started
+## State Machine Diagram
 
-### Prerequisites
+Here is a diagram of the state machine:
 
-- Rust: You can install Rust from the official website [here](https://www.rust-lang.org/tools/install).
-- AWS CLI: You can install AWS CLI from the official AWS guide [here](https://aws.amazon.com/cli/).
-- AWS SAM CLI: You can install AWS SAM CLI from the official AWS guide [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
+![alt text](stepfunctions_graph.png)
 
-### Dependencies
+## State Machine Execution
 
-This project uses the following Rust crates:
+The state machine starts with the `List_Check` state, which executes a Python Lambda function that checks if the input is a numeric list. The output of this function is used in the `Choice` state to decide the next state. If the output is `1`, the state machine moves to the `Summary_Stats` state and executes a pre-defined Rust Lambda function that calculates summary statistics. If the output is not `1`, the state machine ends with a failure.
 
-- `anyhow`
-- `lambda_runtime`
-- `log`
-- `serde_json`
-- `tokio`
-- `env_logger`
+Here is a demonstration of a successful run of the state machine:
 
-You can add these dependencies to your project by including them in your `Cargo.toml` file.
+![alt text](<stepfunctions_graph (1).png>)
 
-### Installation
+And here is the final output of the state machine:
 
-1. Clone the repository:
+![alt text](image-2.png)
 
-```bash
-git clone https://gitlab.com/osama-shawir/rust-lambda-function.git
-cd rust-lambda-function
-```
+## Demo Video
 
-2. Build the project:
+For a more detailed walkthrough of the state machine and its execution, watch this demo video:
 
-```bash
-cargo build --release
-```
+[![Demo Video](path_to_your_video_thumbnail)](path_to_your_video)
 
-3. Create a deployment package:
 
-```bash
-zip function.zip target/release/rust-lambda-function
-```
+## Setup
 
-4. Create a new Lambda function:
+To create the state machine:
 
-```bash
-aws lambda create-function --function-name rust-lambda-function --handler doesn't.matter --zip-file fileb://function.zip --runtime provided --role arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/service-role/YourServiceRoleForLambda
-```
+1. Open the AWS Management Console and navigate to the Step Functions service.
 
-Replace YOUR_AWS_ACCOUNT_ID with your AWS account ID and YourServiceRoleForLambda with your Lambda service role.
+2. Click on "Create a state machine" and choose "Design visually".
 
-### Testing
+3. Add the states as described above, using the ARNs of the deployed Lambda functions.
 
-After deploying the Lambda function, you can test it by invoking it with a JSON file as input:
+4. Save and publish the state machine.
 
-```bash
-aws lambda invoke --function-name rust-lambda-function --payload file://input.json output.txt
-```
-Replace input.json with the path to your input JSON file. The results will be written to output.txt.
-To expose your function via HTTP, you can create an API Gateway and connect it to your Lambda function. The input JSON file can be sent as a POST request to the API Gateway endpoint and the results will be returned in the response. For security reasons, we will not be posting the API gateway constructed for this project publically here, but a screenshot with redacted information can be found below.
-
-#### Request:
-
-![alt text](image.png)
-
-#### Response:
-
-![alt text](image-1.png)
-
-#### Sample input JSON file:
-
-```json
-
-[1.0, 2.0, 3.0, 4.0, 5.0]
-
-```
-
-#### Sample output text file:
-
-```txt
-{"max":5.0,"mean":3.0,"median":3.0,"min":1.0,"std_dev":1.4142135623730951}
-```
+Now, you can start an execution of the state machine with an initial input.
